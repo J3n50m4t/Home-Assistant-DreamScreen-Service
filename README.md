@@ -10,12 +10,14 @@ dreamscreen:
 ## Services
 ### dreamscreen.set_mode
 **mode**
+
 | Value | Mode |
 | - | - |
 | 0 | Off |
 | 1 | Video |
 | 2 | Music |
 | 3 | Ambient|
+
 ```json
 {
     "mode": 1
@@ -23,11 +25,13 @@ dreamscreen:
 ```
 ### dreamscreen.set_hdmi_source
 **source**
+
 | Value | HDMI Source |
 | - | - |
 | 0 | HDMI Source 1 |
 | 1 | HDMI Source 2 |
 | 2 | HDMI Source 3 |
+
 ```json
 {
     "source": 0
@@ -42,10 +46,12 @@ dreamscreen:
 ```
 ### dreamscreen.set_ambiance_mode
 **mode**
+
 | Value | Ambiance Mode |
 | - | - |
 | 0 | Color/Slider? |
 | 1 | Scenes (Required for setting scene below) |
+
 ```json
 {
     "mode": 1
@@ -53,6 +59,7 @@ dreamscreen:
 ```
 ### dreamscreen.set_ambiance_scene
 **scene**
+
 | Value | Ambiance Scene |
 | - | - |
 | 0 | Random Colors |
@@ -64,6 +71,7 @@ dreamscreen:
 | 6 | Holiday|
 | 7 | Pop|
 | 8 | Enchanted Forrest|
+
 ```json
 {
     "scene": 4
