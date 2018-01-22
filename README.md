@@ -1,5 +1,5 @@
 # Home-Assistant-DreamScreen-Service
-Based on ideas from https://github.com/avwuff/DreamScreenControl and [https://github.com/genesisfactor/DreamScreenCommander](https://github.com/genesisfactor/DreamScreenCommander), and [DreamScreen WiFI UDP Protocol](http://dreamscreen.boards.net/thread/293/dreamscreen-wifi-udp-protocol) .  This is a custom component for Home-Assistant which will add the ability to control a Wifi enabled DreamScreen (HD & 4k).  Currently the support is new/experimental.
+Based on ideas from https://github.com/avwuff/DreamScreenControl and [https://github.com/genesisfactor/DreamScreenCommander](https://github.com/genesisfactor/DreamScreenCommander), and [DreamScreen WiFi UDP Protocol](http://dreamscreen.boards.net/thread/293/dreamscreen-wifi-udp-protocol) .  This is a custom component for Home-Assistant which will add the ability to control a Wifi enabled DreamScreen (HD & 4k).  Currently the support is new/experimental.
 
 # Installation/Usage
 Simply place the `custom_components` folder in your Home Assistant config folder and you should be able to use it in the examples below.  It only exposes services but in the future it would be nice to show the current status of the DreamScreen too.
