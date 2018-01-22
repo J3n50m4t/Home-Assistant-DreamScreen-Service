@@ -5,11 +5,48 @@ Based on ideas from https://github.com/avwuff/DreamScreenControl and [https://gi
 Simply place the `custom_components` folder in your Home Assistant config folder and you should be able to use it in the examples below.  It only exposes services but in the future it would be nice to show the current status of the DreamScreen too.
 
 ## Example Configuration
+This exposes the input sources as individual bulbs for the emulated_hue bridge so that you might control the HDMI inputs via Harmony or some other apps.
+
 **ip_address** Required IP address to communicate with your DreamScreen.  Right now there is only support for 1 at a time.
+
 **group** Optional group.  If you're not sure, don't use this parameter.
+
 ```yaml
 dreamscreen:
   ip_address: 172.10.10.200
+
+homeassistant:
+  customize:
+    script.dreamscreen_input_source_1:
+      emulated_hue_hidden: false
+      hidden: true
+    script.dreamscreen_input_source_2:
+      emulated_hue_hidden: false
+      hidden: true
+    script.dreamscreen_input_source_3:
+      emulated_hue_hidden: false
+      hidden: true
+
+script:
+  dreamscreen_input_source_1:
+    alias: "DreamScreen - Source 1"
+    sequence:
+      - service: dreamscreen.set_hdmi_source
+        data:
+          source: 0
+  dreamscreen_input_source_2:
+    alias: "DreamScreen - Source 2"
+    sequence:
+      - service: dreamscreen.set_hdmi_source
+        data:
+          source: 1
+  dreamscreen_input_source_3:
+    alias: "DreamScreen - Source 3"
+    sequence:
+      - service: dreamscreen.set_hdmi_source
+        data:
+          source: 2
+
 ```
 
 ## Services
@@ -64,9 +101,13 @@ dreamscreen:
 ```
 ### dreamscreen.set_ambiance_color
 At least one of the 3 keys are required.
+
 **red**: Integer values between 0 and 255
+
 **green**: Integer values between 0 and 255
+
 **blue**: Integer values between 0 and 255
+
 ```json
 {
     "red": 64,
