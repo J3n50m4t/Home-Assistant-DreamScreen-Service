@@ -160,7 +160,7 @@ class DreamScreen:
 
 @asyncio.coroutine
 def async_setup(hass, config):
-    """Setup TwitchCast."""
+    """Setup DreamScreen."""
     config = config.get(DOMAIN, {})
 
     ds = DreamScreen(config[CONF_IP_ADDRESS])
