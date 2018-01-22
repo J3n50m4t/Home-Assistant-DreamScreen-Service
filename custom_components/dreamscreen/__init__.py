@@ -107,9 +107,9 @@ class DreamScreen:
     def set_hdmi_source(self, hdmi_source: int) -> None:
         """Set DreamScreen HDMI source.
 
-        0: Source 1
-        1: Source 2
-        2: Source 3
+        0: HDMI Source 1
+        1: HDMI Source 2
+        2: HDMI Source 3
         """
         hdmi_source = max(min(hdmi_source, 2), 0)
         packet = self._build_packet(32, hdmi_source)
@@ -131,7 +131,7 @@ class DreamScreen:
 
         Not sure on clamping/all values
         0: Color/Slider?
-        1: Scenes (Requires for setting scene below)
+        1: Scenes (Required for setting scene below)
         """
         mode = max(min(mode, 1), 0)
         packet = self._build_packet(8, mode)
