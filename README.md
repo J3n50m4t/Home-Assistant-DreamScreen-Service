@@ -13,7 +13,7 @@ git clone git@github.com:GregoryDosh/Home-Assistant-DreamScreen-Service.git drea
 ```
 
 ## Git Submodule
-Adding it as a submodule will allow you to pull updates in the future using `git submodule update`.
+Adding it as a submodule will allow you to pull updates in the future using `git submodule foreach git pull`.
 ```bash
 git submodule add -b master git@github.com:GregoryDosh/Home-Assistant-DreamScreen-Service.git dreamscreen
 ```
