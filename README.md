@@ -2,7 +2,8 @@
 Based on ideas from https://github.com/avwuff/DreamScreenControl and [https://github.com/genesisfactor/DreamScreenCommander](https://github.com/genesisfactor/DreamScreenCommander), and [DreamScreen WiFi UDP Protocol](http://dreamscreen.boards.net/thread/293/dreamscreen-wifi-udp-protocol) .  This is a custom component for Home-Assistant which will add the ability to control a Wifi enabled DreamScreen (HD & 4k).  Currently the support is new/experimental.
 
 # Installation/Usage
-Simply place the `custom_components` folder in your Home Assistant config folder and you should be able to use it in the examples below.  It only exposes services but in the future it would be nice to show the current status of the DreamScreen too.
+
+Simply place the `dreamscreen` folder in your `custom_components` folder in your Home Assistant config location and you should be able to use it in the examples below.  It only exposes services but in the future it would be nice to show the current status of the DreamScreen too.
 
 ## Example Configuration
 This exposes the input sources as individual bulbs for the emulated_hue bridge so that you might control the HDMI inputs via Harmony or some other apps.
