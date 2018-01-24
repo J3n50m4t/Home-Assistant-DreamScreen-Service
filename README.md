@@ -3,7 +3,7 @@ Based on ideas from https://github.com/avwuff/DreamScreenControl and [https://gi
 
 # Installation/Usage
 
-# Copy & Paste
+## Copy & Paste
 Simply place the `dreamscreen` folder in your `custom_components` folder in your Home Assistant config location and you should be able to use it in the examples below.  It only exposes services but in the future it would be nice to show the current status of the DreamScreen too.
 
 ## Git Clone
