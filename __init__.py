@@ -75,7 +75,7 @@ def async_setup(hass, config):
     """Setup DreamScreen."""
     config = config.get(DOMAIN, {})
 
-    from dreamscreen import DreamScreen
+    from .dreamscreen import DreamScreen
     ds = DreamScreen(ip=config[CONF_IP_ADDRESS], group=config[CONF_GROUP])
 
     hass.data[DOMAIN] = {
