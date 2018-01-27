@@ -1,9 +1,10 @@
 """DreamScreen controller. Send commands to/from your DreamScreen via Wifi."""
-
 import socket
 import logging
 
 REQUIREMENTS = ["crc8==0.0.4"]
+
+__version__ = '0.1.1'
 
 _LOGGER = logging.getLogger(__name__)
 
