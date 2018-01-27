@@ -3,17 +3,14 @@ Based on ideas from https://github.com/avwuff/DreamScreenControl and [https://gi
 
 # Installation/Usage
 
-## Copy & Paste
-Simply place the `dreamscreen` folder in your `custom_components` folder in your Home Assistant config location and you should be able to use it in the examples below.  It only exposes services but in the future it would be nice to show the current status of the DreamScreen too.
-
 ## Git Clone
-You can clone this repo into your `custom_components` folder in your Home Assistant config location with the name `dreamscreen`.  The `__init__.py` at the root of the repo is a symbolic link into the `dreamscreen` folder.
+You can clone this repo into your `custom_components` folder in your Home Assistant config location with the name `dreamscreen`.
 ```bash
 git clone git@github.com:GregoryDosh/Home-Assistant-DreamScreen-Service.git dreamscreen
 ```
 
 ## Git Submodule
-Adding it as a submodule will allow you to pull updates in the future using `git submodule foreach git pull`.
+You can also add it as a submodule which will allow you to pull updates in the future using `git submodule foreach git pull`.
 ```bash
 git submodule add -b master git@github.com:GregoryDosh/Home-Assistant-DreamScreen-Service.git dreamscreen
 ```

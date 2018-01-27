@@ -6,7 +6,6 @@ https://github.com/avwuff/DreamScreenControl
 and
 https://github.com/genesisfactor/DreamScreenCommander
 """
-from .dreamscreen import DreamScreenControl
 import logging
 import asyncio
 
