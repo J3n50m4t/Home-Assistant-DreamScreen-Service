@@ -127,5 +127,5 @@ class DreamScreen:
                       format(red, green, blue))
 
 if __name__ == '__main__':
-    ds = DreamScreen(ip="172.16.16.76", group=0)
+    ds = DreamScreen(ip="172.10.10.200", group=0)
     ds.set_mode(1)
