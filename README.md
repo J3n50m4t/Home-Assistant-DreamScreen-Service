@@ -1,5 +1,5 @@
 # Home-Assistant-DreamScreen-Service
-Based on ideas from https://github.com/avwuff/DreamScreenControl and [https://github.com/genesisfactor/DreamScreenCommander](https://github.com/genesisfactor/DreamScreenCommander), and [DreamScreen WiFi UDP Protocol](http://dreamscreen.boards.net/thread/293/dreamscreen-wifi-udp-protocol) .  This is a custom component for Home-Assistant which will add the ability to control a Wifi enabled DreamScreen (HD & 4k).  Currently the support is new/experimental.
+This is a custom component for Home-Assistant which will add the ability to control a Wifi enabled DreamScreen (HD & 4k).  Currently the support is new/experimental.
 
 # Installation/Usage
 
@@ -19,13 +19,8 @@ git submodule add -b master git@github.com:GregoryDosh/Home-Assistant-DreamScree
 ## Example Configuration
 This exposes the input sources as individual bulbs for the emulated_hue bridge so that you might control the HDMI inputs via Harmony or some other apps.
 
-**ip_address** Required IP address to communicate with your DreamScreen.  Right now there is only support for 1 at a time.
-
-**group** Optional group.  If you're not sure, don't use this parameter.
-
 ```yaml
 dreamscreen:
-  ip_address: 172.10.10.200
 
 homeassistant:
   customize:
@@ -45,24 +40,29 @@ script:
     sequence:
       - service: dreamscreen.set_hdmi_source
         data:
+          entity_id: dreamscreen.living_room
           source: 0
   dreamscreen_input_source_2:
     alias: "DreamScreen - Source 2"
     sequence:
       - service: dreamscreen.set_hdmi_source
         data:
+          entity_id: dreamscreen.living_room
           source: 1
   dreamscreen_input_source_3:
     alias: "DreamScreen - Source 3"
     sequence:
       - service: dreamscreen.set_hdmi_source
         data:
+          entity_id: dreamscreen.living_room
           source: 2
 
 ```
 
 ## Services
 ### dreamscreen.set_mode
+**entity_id**: Name of DreamScreen device to send command to.
+
 **mode**
 
 | Value | Mode |
@@ -74,10 +74,14 @@ script:
 
 ```json
 {
-    "mode": 1
+    'entity_id': 'dreamscreen.living_room',
+    'mode': 1
 }
 ```
+
 ### dreamscreen.set_hdmi_source
+**entity_id**: Name of DreamScreen device to send command to.
+
 **source**
 
 | Value | HDMI Source |
@@ -88,46 +92,36 @@ script:
 
 ```json
 {
-    "source": 0
+    'entity_id': 'dreamscreen.living_room',
+    'source': 0
 }
 ```
+
 ### dreamscreen.set_brightness
+**entity_id**: Name of DreamScreen device to send command to.
+
 **brightness**: Integer values between 0 and 100
 ```json
 {
-    "brightness": 75
+    'entity_id': 'dreamscreen.living_room',
+    'brightness': 75
 }
 ```
-### dreamscreen.set_ambiance_mode
-**mode**
 
-| Value | Ambiance Mode |
-| - | - |
-| 0 | RGB Color |
-| 1 | Scenes (Required for setting scene below) |
-
-```json
-{
-    "mode": 1
-}
-```
 ### dreamscreen.set_ambiance_color
-At least one of the 3 keys are required.
+**entity_id**: Name of DreamScreen device to send command to.
 
-**red**: Integer values between 0 and 255
-
-**green**: Integer values between 0 and 255
-
-**blue**: Integer values between 0 and 255
-
+**color**: Hex valued color
 ```json
 {
-    "red": 64,
-    "green": 224,
-    "blue": 208
+    'entity_id': 'dreamscreen.living_room',
+    'color': "#40e0d0",
 }
 ```
+
 ### dreamscreen.set_ambiance_scene
+**entity_id**: Name of DreamScreen device to send command to.
+
 **scene**
 
 | Value | Ambiance Scene |
@@ -144,6 +138,7 @@ At least one of the 3 keys are required.
 
 ```json
 {
-    "scene": 4
+    'entity_id': 'dreamscreen.living_room',
+    'scene': 4
 }
 ```

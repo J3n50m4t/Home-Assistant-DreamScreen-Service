@@ -1,0 +1,49 @@
+set_mode:
+  description: Switches DreamScreen device to specified mode
+  fields:
+    entity_id:
+      description: Name(s) of entities
+      example: 'dreamscreen.living_room'
+    mode:
+      description: Mode to set for device.
+      example: 1
+
+set_hdmi_source:
+  description: Switches DreamScreen HDMI source. (0 indexed)
+  fields:
+    entity_id:
+      description: Name(s) of entities
+      example: 'dreamscreen.living_room'
+    source:
+      description: Source to set for HDMI Input.
+      example: 1
+
+set_brightness:
+  description: Changes DreamScreen brightness to specified value
+  fields:
+    entity_id:
+      description: Name(s) of entities
+      example: 'dreamscreen.living_room'
+    brightness:
+      description: Brightness value between 0 and 100
+      example: 75
+
+set_ambient_scene:
+  description: Switches DreamScreen device to specified ambient scene
+  fields:
+    entity_id:
+      description: Name(s) of entities
+      example: 'dreamscreen.living_room'
+    scene:
+      description: Scene to switch to. [0-8]
+      example: 6
+
+set_ambient_color:
+  description: Switches DreamScreen device to specified ambient color
+  fields:
+    entity_id:
+      description: Name(s) of entities
+      example: 'dreamscreen.living_room'
+    color:
+      description: Hex color to use
+      example: "#40e0d0"

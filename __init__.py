@@ -1,166 +1,193 @@
-"""
-Adds a service to Home Assistant to control DreamScreen wifi models.
-
-Based on ideas from
-https://github.com/avwuff/DreamScreenControl
-and
-https://github.com/genesisfactor/DreamScreenCommander
-"""
-import logging
+"""Adds a service to Home Assistant to control DreamScreen wifi models."""
 import asyncio
+import logging
 
 import voluptuous as vol
 import homeassistant.helpers.config_validation as cv
-from homeassistant.const import (CONF_IP_ADDRESS, CONF_MODE, CONF_BRIGHTNESS)
+from homeassistant.const import (ATTR_ENTITY_ID, CONF_MODE, CONF_BRIGHTNESS)
+from homeassistant.helpers.entity import Entity, generate_entity_id
+from homeassistant.helpers.entity_component import EntityComponent
 
-REQUIREMENTS = ["crc8==0.0.4"]
+REQUIREMENTS = ["pydreamscreen>=0.0.5"]
 
 _LOGGER = logging.getLogger(__name__)
 
 DOMAIN = 'dreamscreen'
 
-DREAMSCREEN_CONTROLLER = 'dreamscreen controller'
+ENTITY_ID_FORMAT = DOMAIN + '.{}'
 
 SERVICE_MODE = 'set_mode'
 SERVICE_MODE_SCHEMA = vol.Schema({
+    vol.Required(ATTR_ENTITY_ID): cv.entity_ids,
     vol.Required(CONF_MODE): vol.All(int, vol.Range(min=0, max=3)),
 })
 
 SERVICE_HDMI_SOURCE = 'set_hdmi_source'
 CONF_HDMI_SOURCE = 'source'
 SERVICE_HDMI_SOURCE_SCHEMA = vol.Schema({
+    vol.Required(ATTR_ENTITY_ID): cv.entity_ids,
     vol.Required(CONF_HDMI_SOURCE): vol.All(int, vol.Range(min=0, max=2)),
 })
 
 SERVICE_BRIGHTNESS = 'set_brightness'
 SERVICE_BRIGHTNESS_SCHEMA = vol.Schema({
+    vol.Required(ATTR_ENTITY_ID): cv.entity_ids,
     vol.Required(CONF_BRIGHTNESS): vol.All(int, vol.Range(min=0, max=100)),
 })
 
-SERVICE_AMBIANCE_MODE = 'set_ambiance_mode'
-SERVICE_AMBIANCE_MODE_SCHEMA = vol.Schema({
-    vol.Required(CONF_MODE): vol.All(int, vol.Range(min=0, max=1)),
+SERVICE_AMBIENT_SCENE = 'set_ambient_scene'
+CONF_AMBIENT_SCENE = 'scene'
+SERVICE_AMBIENT_SCENE_SCHEMA = vol.Schema({
+    vol.Required(ATTR_ENTITY_ID): cv.entity_ids,
+    vol.Required(CONF_AMBIENT_SCENE): vol.All(int, vol.Range(min=0, max=8)),
 })
 
-SERVICE_AMBIANCE_SCENE = 'set_ambiance_scene'
-CONF_AMBIANCE_SCENE = 'scene'
-SERVICE_AMBIANCE_SCENE_SCHEMA = vol.Schema({
-    vol.Required(CONF_AMBIANCE_SCENE): vol.All(int, vol.Range(min=0, max=8)),
+SERVICE_AMBIENT_COLOR = 'set_ambient_color'
+CONF_AMBIENT_COLOR = 'color'
+SERVICE_AMBIENT_COLOR_SCHEMA = vol.Schema({
+    vol.Required(ATTR_ENTITY_ID): cv.entity_ids,
+    vol.Required(CONF_AMBIENT_COLOR): vol.Match(r'^#(?:[0-9a-fA-F]{3}){1,2}$')
 })
 
-
-SERVICE_AMBIANCE_COLOR = 'set_ambiance_color'
-CONF_AMBIANCE_COLOR_RED = 'red'
-CONF_AMBIANCE_COLOR_GREEN = 'green'
-CONF_AMBIANCE_COLOR_BLUE = 'blue'
-SERVICE_AMBIANCE_COLOR_SCHEMA = vol.Schema({
-    vol.Required(vol.Any(CONF_AMBIANCE_COLOR_RED,
-                         CONF_AMBIANCE_COLOR_GREEN,
-                         CONF_AMBIANCE_COLOR_BLUE),
-                 msg="Need at least 1 color specified."):
-    vol.All(int, vol.Range(min=0, max=255))
-})
-
-CONF_GROUP = 'group'
-CONFIG_SCHEMA = vol.Schema({
-    DOMAIN: vol.Schema({
-        vol.Required(CONF_IP_ADDRESS): cv.string,
-        vol.Optional(CONF_GROUP, default=0): int,
-    })
-}, extra=vol.ALLOW_EXTRA)
+SERVICE_TO_ATTRIBUTE = {
+    SERVICE_MODE: {
+        'attribute': 'mode',
+        'schema': SERVICE_MODE_SCHEMA,
+        'param': CONF_MODE,
+    },
+    SERVICE_HDMI_SOURCE: {
+        'attribute': 'hdmi_input',
+        'schema': SERVICE_HDMI_SOURCE_SCHEMA,
+        'param': CONF_HDMI_SOURCE,
+    },
+    SERVICE_BRIGHTNESS: {
+        'attribute': 'brightness',
+        'schema': SERVICE_BRIGHTNESS_SCHEMA,
+        'param': CONF_BRIGHTNESS,
+    },
+    SERVICE_AMBIENT_SCENE: {
+        'attribute': 'ambient_scene',
+        'schema': SERVICE_AMBIENT_SCENE_SCHEMA,
+        'param': CONF_AMBIENT_SCENE,
+    },
+    SERVICE_AMBIENT_COLOR: {
+        'attribute': 'ambient_color',
+        'schema': SERVICE_AMBIENT_COLOR_SCHEMA,
+        'param': CONF_AMBIENT_COLOR,
+    },
+}
 
 
 @asyncio.coroutine
 def async_setup(hass, config):
     """Setup DreamScreen."""
+    import pydreamscreen
+
     config = config.get(DOMAIN, {})
 
-    from .dreamscreen import DreamScreen
-    ds = DreamScreen(ip=config[CONF_IP_ADDRESS], group=config[CONF_GROUP])
-
-    hass.data[DOMAIN] = {
-        DREAMSCREEN_CONTROLLER: ds
-    }
+    component = EntityComponent(_LOGGER, DOMAIN, hass)
 
     @asyncio.coroutine
-    def set_mode(call):
-        """Change DreamScreen Mode."""
-        mode = call.data.get(CONF_MODE)
-        hass.data[DOMAIN][DREAMSCREEN_CONTROLLER].set_mode(mode)
+    def async_handle_dreamscreen_services(service):
+        """Reusable DreamScreen service caller."""
+        service_definition = SERVICE_TO_ATTRIBUTE.get(service.service)
 
-    # Mode Service
-    hass.services.async_register(
-        DOMAIN,
-        SERVICE_MODE,
-        set_mode,
-        schema=SERVICE_MODE_SCHEMA)
+        attribute = service_definition['attribute']
+        attribute_value = service.data.get(service_definition['param'])
 
-    @asyncio.coroutine
-    def set_hdmi_source(call):
-        """Change DreamScreen HDMI Source."""
-        source = call.data.get(CONF_HDMI_SOURCE)
-        hass.data[DOMAIN][DREAMSCREEN_CONTROLLER].set_hdmi_source(source)
+        target_entities = component.async_extract_from_service(service)
 
-    # HDMI Source Service
-    hass.services.async_register(
-        DOMAIN,
-        SERVICE_HDMI_SOURCE,
-        set_hdmi_source,
-        schema=SERVICE_HDMI_SOURCE_SCHEMA)
+        updates = []
+        for entity in target_entities:
+            _LOGGER.debug("setting {} {} to {}".format(
+                entity.entity_id,
+                attribute,
+                attribute_value
+            ))
+            setattr(entity.device, attribute, attribute_value)
+            updates.append(entity.async_update_ha_state(True))
 
-    @asyncio.coroutine
-    def set_brightness(call):
-        """Change DreamScreen Brightness."""
-        brightness = call.data.get(CONF_BRIGHTNESS)
-        hass.data[DOMAIN][DREAMSCREEN_CONTROLLER].set_brightness(brightness)
+        if updates:
+            yield from asyncio.wait(updates, loop=hass.loop)
 
-    # Brightness Service
-    hass.services.async_register(
-        DOMAIN,
-        SERVICE_BRIGHTNESS,
-        set_brightness,
-        schema=SERVICE_BRIGHTNESS_SCHEMA)
+    for service_name in SERVICE_TO_ATTRIBUTE:
+        schema = SERVICE_TO_ATTRIBUTE[service_name].get('schema')
+        hass.services.async_register(DOMAIN,
+                                     service_name,
+                                     async_handle_dreamscreen_services,
+                                     schema=schema)
 
-    @asyncio.coroutine
-    def set_ambiance_mode(call):
-        """Change DreamScreen Ambiance Mode."""
-        mode = call.data.get(CONF_MODE)
-        hass.data[DOMAIN][DREAMSCREEN_CONTROLLER].set_ambiance_mode(mode)
+    entities = []
+    entity_ids = []
+    for device in pydreamscreen.get_devices():
+        entity = DreamScreenEntity(device=device,
+                                   current_ids=entity_ids)
+        entity_ids.append(entity.entity_id)
+        entities.append(entity)
 
-    # Ambiance Mode Service
-    hass.services.async_register(
-        DOMAIN,
-        SERVICE_AMBIANCE_MODE,
-        set_ambiance_mode,
-        schema=SERVICE_AMBIANCE_MODE_SCHEMA)
-
-    @asyncio.coroutine
-    def set_ambiance_scene(call):
-        """Change DreamScreen Ambiance Scene."""
-        scene = call.data.get(CONF_AMBIANCE_SCENE)
-        hass.data[DOMAIN][DREAMSCREEN_CONTROLLER].set_ambiance_scene(scene)
-
-    # Ambiance Scene Service
-    hass.services.async_register(
-        DOMAIN,
-        SERVICE_AMBIANCE_SCENE,
-        set_ambiance_scene,
-        schema=SERVICE_AMBIANCE_SCENE_SCHEMA)
-
-    @asyncio.coroutine
-    def set_ambiance_color(call):
-        """Change DreamScreen Ambiance Color."""
-        red = call.data.get(CONF_AMBIANCE_COLOR_RED) or 0
-        green = call.data.get(CONF_AMBIANCE_COLOR_GREEN) or 0
-        blue = call.data.get(CONF_AMBIANCE_COLOR_BLUE) or 0
-        hass.data[DOMAIN][DREAMSCREEN_CONTROLLER]. \
-            set_ambiance_color(red=red, green=green, blue=blue)
-
-    # Ambiance Color Service
-    hass.services.async_register(
-        DOMAIN,
-        SERVICE_AMBIANCE_COLOR,
-        set_ambiance_color,
-        schema=SERVICE_AMBIANCE_COLOR_SCHEMA)
-
+    yield from component.async_add_entities(entities)
     return True
+
+
+class DreamScreenEntity(Entity):
+    """Wraps DreamScreen in a Home Assistant entity."""
+
+    def __init__(self, device, current_ids):
+        """Initialize state & entity properties."""
+        self.device = device
+        self.entity_id = generate_entity_id(entity_id_format=ENTITY_ID_FORMAT,
+                                            name=self.device.name,
+                                            current_ids=current_ids)
+        self._name = self.device.name
+
+    @property
+    def name(self):
+        """Device friendly name from DreamScreen device."""
+        return self._name
+
+    @property
+    def state(self) -> str:
+        """Assume turned on if mode is truthy."""
+        return "on" if self.device.mode else 'off'
+
+    @property
+    def assumed_state(self):
+        """If not responding, assume device is off."""
+        return 'off'
+
+    @property
+    def state_attributes(self):
+        """Expose DreamScreen device attributes as state properties."""
+        import pydreamscreen
+        attrs = {
+            'group_name': self.device.group_name,
+            'group_number': self.device.group_number,
+            'device_mode': self.device.mode,
+            'brightness': self.device.brightness,
+            'ambient_color': "#" + self.device.ambient_color.hex().upper(),
+            'ambient_scene': self.device.ambient_scene
+        }
+
+        if isinstance(self.device, (pydreamscreen.DreamScreenHD,
+                                    pydreamscreen.DreamScreen4K)):
+            selected_hdmi = None  # type: str
+            if self.device.hdmi_input == 0:
+                selected_hdmi = self.device.hdmi_input_1_name
+            elif self.device.hdmi_input == 1:
+                selected_hdmi = self.device.hdmi_input_2_name
+            elif self.device.hdmi_input == 2:
+                selected_hdmi = self.device.hdmi_input_3_name
+            attrs.update({
+                'selected_hdmi': selected_hdmi,
+                'hdmi_input': self.device.hdmi_input,
+                'hdmi_input_1_name': self.device.hdmi_input_1_name,
+                'hdmi_input_2_name': self.device.hdmi_input_2_name,
+                'hdmi_input_3_name': self.device.hdmi_input_3_name,
+                'hdmi_active_channels': self.device.hdmi_active_channels,
+            })
+
+        return attrs
+
+    def update(self):
+        """When updating entity, call update on the device."""
+        self.device.update_current_state()
