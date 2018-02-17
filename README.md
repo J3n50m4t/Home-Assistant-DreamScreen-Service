@@ -74,8 +74,8 @@ script:
 
 ```json
 {
-    'entity_id': 'dreamscreen.living_room',
-    'mode': 1
+    "entity_id": "dreamscreen.living_room",
+    "mode": 1
 }
 ```
 
@@ -92,8 +92,8 @@ script:
 
 ```json
 {
-    'entity_id': 'dreamscreen.living_room',
-    'source': 0
+    "entity_id": "dreamscreen.living_room",
+    "source": 0
 }
 ```
 
@@ -103,8 +103,8 @@ script:
 **brightness**: Integer values between 0 and 100
 ```json
 {
-    'entity_id': 'dreamscreen.living_room',
-    'brightness': 75
+    "entity_id": "dreamscreen.living_room",
+    "brightness": 75
 }
 ```
 
@@ -114,8 +114,8 @@ script:
 **color**: Hex valued color
 ```json
 {
-    'entity_id': 'dreamscreen.living_room',
-    'color': "#40e0d0",
+    "entity_id": "dreamscreen.living_room",
+    "color": "#40e0d0",
 }
 ```
 
@@ -138,7 +138,7 @@ script:
 
 ```json
 {
-    'entity_id': 'dreamscreen.living_room',
-    'scene': 4
+    "entity_id": "dreamscreen.living_room",
+    "scene": 4
 }
 ```
