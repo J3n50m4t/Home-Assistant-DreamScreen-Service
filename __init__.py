@@ -8,7 +8,7 @@ from homeassistant.const import (ATTR_ENTITY_ID, CONF_MODE, CONF_BRIGHTNESS)
 from homeassistant.helpers.entity import Entity, generate_entity_id
 from homeassistant.helpers.entity_component import EntityComponent
 
-REQUIREMENTS = ["pydreamscreen>=0.0.5"]
+REQUIREMENTS = ["pydreamscreen>=0.0.6"]
 
 _LOGGER = logging.getLogger(__name__)
 
