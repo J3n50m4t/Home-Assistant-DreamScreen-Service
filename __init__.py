@@ -19,27 +19,27 @@ ENTITY_ID_FORMAT = DOMAIN + '.{}'
 SERVICE_MODE = 'set_mode'
 SERVICE_MODE_SCHEMA = vol.Schema({
     vol.Required(ATTR_ENTITY_ID): cv.entity_ids,
-    vol.Required(CONF_MODE): vol.All(int, vol.Range(min=0, max=3)),
+    vol.Required(CONF_MODE): vol.All(vol.Coerce(int), vol.Range(min=0, max=3)),
 })
 
 SERVICE_HDMI_SOURCE = 'set_hdmi_source'
 CONF_HDMI_SOURCE = 'source'
 SERVICE_HDMI_SOURCE_SCHEMA = vol.Schema({
     vol.Required(ATTR_ENTITY_ID): cv.entity_ids,
-    vol.Required(CONF_HDMI_SOURCE): vol.All(int, vol.Range(min=0, max=2)),
+    vol.Required(CONF_HDMI_SOURCE): vol.All(vol.Coerce(int), vol.Range(min=0, max=2)),
 })
 
 SERVICE_BRIGHTNESS = 'set_brightness'
 SERVICE_BRIGHTNESS_SCHEMA = vol.Schema({
     vol.Required(ATTR_ENTITY_ID): cv.entity_ids,
-    vol.Required(CONF_BRIGHTNESS): vol.All(int, vol.Range(min=0, max=100)),
+    vol.Required(CONF_BRIGHTNESS): vol.All(vol.Coerce(int), vol.Range(min=0, max=100)),
 })
 
 SERVICE_AMBIENT_SCENE = 'set_ambient_scene'
 CONF_AMBIENT_SCENE = 'scene'
 SERVICE_AMBIENT_SCENE_SCHEMA = vol.Schema({
     vol.Required(ATTR_ENTITY_ID): cv.entity_ids,
-    vol.Required(CONF_AMBIENT_SCENE): vol.All(int, vol.Range(min=0, max=8)),
+    vol.Required(CONF_AMBIENT_SCENE): vol.All(vol.Coerce(int), vol.Range(min=0, max=8)),
 })
 
 SERVICE_AMBIENT_COLOR = 'set_ambient_color'
