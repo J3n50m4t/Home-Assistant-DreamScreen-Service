@@ -6,13 +6,13 @@ This is a custom component for Home-Assistant which will add the ability to cont
 ## Git Clone
 You can clone this repo into your `custom_components` folder in your Home Assistant config location with the name `dreamscreen`.
 ```bash
-git clone git@github.com:GregoryDosh/Home-Assistant-DreamScreen-Service.git dreamscreen
+git clone https://github.com/GregoryDosh/Home-Assistant-DreamScreen-Service.git dreamscreen
 ```
 
 ## Git Submodule
 You can also add it as a submodule which will allow you to pull updates in the future using `git submodule foreach git pull`.
 ```bash
-git submodule add -b master git@github.com:GregoryDosh/Home-Assistant-DreamScreen-Service.git dreamscreen
+git submodule add -b master https://github.com/GregoryDosh/Home-Assistant-DreamScreen-Service.git dreamscreen
 ```
 
 
