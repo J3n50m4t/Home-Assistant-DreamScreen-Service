@@ -95,7 +95,7 @@ def async_setup(hass, config):
         attribute = service_definition['attribute']
         attribute_value = service.data.get(service_definition['param'])
 
-        target_entities = component.async_extract_from_service(service)
+        target_entities = yield from component.async_extract_from_service(service)
 
         updates = []
         for entity in target_entities:
