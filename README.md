@@ -15,6 +15,42 @@ You can also add it as a submodule which will allow you to pull updates in the f
 git submodule add -b master git@github.com:GregoryDosh/Home-Assistant-DreamScreen-Service.git dreamscreen
 ```
 
+## Configuration
+
+Simply adding the `dreamscreen` component will enable device autodiscovery.
+
+```yaml
+dreamscreen:
+```
+
+Depending on your network some times a search may terminate before the discovery
+has completed. You can specify the timeout to use before the component will give
+up waiting for a response.
+
+```yaml
+dreamscreen:
+  timeout: 5
+```
+If you want you can configure the devices by hostname or IP address, this will disable
+auto discovery.
+
+```yaml
+dreamscreen:
+  devices:
+    - dream_screen:
+        address: 192.168.0.140
+```
+
+Finally: you can specify the timeout for the component to wait for a response when
+requesting the current state from the device.
+
+```yaml
+dreamscreen:
+  devices:
+    - dream_screen:
+        address: 192.168.0.140
+        timeout: 5
+```
 
 ## Example Configuration
 This exposes the input sources as individual bulbs for the emulated_hue bridge so that you might control the HDMI inputs via Harmony or some other apps.

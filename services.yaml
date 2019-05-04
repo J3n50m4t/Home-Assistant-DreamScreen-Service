@@ -5,7 +5,7 @@ set_mode:
       description: Name(s) of entities
       example: 'dreamscreen.living_room'
     mode:
-      description: Mode to set for device.
+      description: Mode to set for device. [0=Off, 1=Video, 2=Music, 3=Ambient]
       example: 1
 
 set_hdmi_source:
@@ -35,7 +35,7 @@ set_ambient_scene:
       description: Name(s) of entities
       example: 'dreamscreen.living_room'
     scene:
-      description: Scene to switch to. [0-8]
+      description: Scene to switch to. [0=Random,1=Fire,2=Twinkle,3=Ocean,4=Pride,5=Fireworks,6=Holiday,7=Pop,8=Forest]
       example: 6
 
 set_ambient_color:
