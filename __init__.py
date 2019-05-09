@@ -8,13 +8,27 @@ from homeassistant.const import (ATTR_ENTITY_ID, CONF_MODE, CONF_BRIGHTNESS)
 from homeassistant.helpers.entity import Entity, generate_entity_id
 from homeassistant.helpers.entity_component import EntityComponent
 
-REQUIREMENTS = ["pydreamscreen>=0.0.6"]
-
 _LOGGER = logging.getLogger(__name__)
 
 DOMAIN = 'dreamscreen'
 
+DEVICES_CONF = 'devices'
+DEVICE_ADDR = 'address'
+TIMEOUT_CONF = 'timeout'
+TIMEOUT_DEFAULT = 1
 ENTITY_ID_FORMAT = DOMAIN + '.{}'
+
+CONFIG_SCHEMA = vol.Schema({
+    DOMAIN: vol.Schema({
+        vol.Optional(TIMEOUT_CONF, default=TIMEOUT_DEFAULT): cv.positive_int,
+        vol.Optional(DEVICES_CONF, []): [ vol.Schema({
+            cv.slug: vol.Schema({
+                vol.Required(DEVICE_ADDR): str,
+                vol.Optional(TIMEOUT_CONF, default=TIMEOUT_DEFAULT): cv.positive_int
+            })
+        })] 
+    })
+}, extra=vol.ALLOW_EXTRA)
 
 SERVICE_MODE = 'set_mode'
 SERVICE_MODE_SCHEMA = vol.Schema({
@@ -119,11 +133,36 @@ def async_setup(hass, config):
 
     entities = []
     entity_ids = []
-    for device in pydreamscreen.get_devices():
-        entity = DreamScreenEntity(device=device,
-                                   current_ids=entity_ids)
-        entity_ids.append(entity.entity_id)
-        entities.append(entity)
+    timeout = config[TIMEOUT_CONF]
+    configured = config[DEVICES_CONF]
+    _LOGGER.debug("Discovery Timeout: %d" % timeout)
+    _LOGGER.debug("Configured devices: %d" % len(configured))
+    if len(configured) > 0:
+        for deviceConf in configured:
+            deviceName = list(deviceConf.keys())[0]
+            deviceInfo = deviceConf[deviceName]
+            address = deviceInfo[DEVICE_ADDR]
+            timeout = deviceInfo[TIMEOUT_CONF]
+            _LOGGER.debug("Adding %s - %s [Timeout: %d]" % (deviceName, address, timeout))
+            device_state = pydreamscreen.get_state(ip=address, timeout=timeout)
+            if device_state == None:
+                _LOGGER.warn("Failed to add device [%s] %s. Try setting a 'timeout' in the device config." \
+                    % (address, deviceName))
+            else:
+                _LOGGER.debug("Adding [%s]  %s => State: %s" % (address, deviceName, device_state))
+                device = pydreamscreen.get_device(device_state)
+                entity = DreamScreenEntity(device=device,
+                                    current_ids=entity_ids,timeout=timeout, name=deviceName)
+                entity_ids.append(entity.entity_id)
+                entities.append(entity)
+    else:
+        _LOGGER.debug("DreamScreen will discover devices.")
+        for device in pydreamscreen.get_devices(timeout):
+            _LOGGER.info("Discovered device: %s" % device)
+            entity = DreamScreenEntity(device=device,
+                                    current_ids=entity_ids)
+            entity_ids.append(entity.entity_id)
+            entities.append(entity)
 
     yield from component.async_add_entities(entities)
     return True
@@ -132,13 +171,16 @@ def async_setup(hass, config):
 class DreamScreenEntity(Entity):
     """Wraps DreamScreen in a Home Assistant entity."""
 
-    def __init__(self, device, current_ids):
+    def __init__(self, device, current_ids, timeout=1, name=None):
         """Initialize state & entity properties."""
         self.device = device
+        self.timeout = timeout
+        if name == None:
+            name = self.device.name
         self.entity_id = generate_entity_id(entity_id_format=ENTITY_ID_FORMAT,
-                                            name=self.device.name,
+                                            name=name,
                                             current_ids=current_ids)
-        self._name = self.device.name
+        self._name = name
 
     @property
     def name(self):
@@ -190,4 +232,4 @@ class DreamScreenEntity(Entity):
 
     def update(self):
         """When updating entity, call update on the device."""
-        self.device.update_current_state()
+        self.device.update_current_state(self.timeout)
