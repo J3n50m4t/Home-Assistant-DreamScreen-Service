@@ -121,8 +121,7 @@ SERVICE_TO_ATTRIBUTE = {
 }
 
 
-@asyncio.coroutine
-def async_setup(hass, config):
+async def async_setup(hass, config):
     """Setup DreamScreen."""
     import pydreamscreen
 
@@ -130,15 +129,14 @@ def async_setup(hass, config):
 
     component = EntityComponent(_LOGGER, DOMAIN, hass)
 
-    @asyncio.coroutine
-    def async_handle_dreamscreen_services(service):
+    async def async_handle_dreamscreen_services(service):
         """Reusable DreamScreen service caller."""
         service_definition = SERVICE_TO_ATTRIBUTE.get(service.service)
 
         attribute = service_definition["attribute"]
         attribute_value = service.data.get(service_definition["param"])
 
-        target_entities = yield from component.async_extract_from_service(service)
+        target_entities = await component.async_extract_from_service(service)
 
         updates = []
         for entity in target_entities:
@@ -151,7 +149,7 @@ def async_setup(hass, config):
             updates.append(entity.async_update_ha_state(True))
 
         if updates:
-            yield from asyncio.wait(updates, loop=hass.loop)
+            await asyncio.wait(updates, loop=hass.loop)
 
     for service_name in SERVICE_TO_ATTRIBUTE:
         schema = SERVICE_TO_ATTRIBUTE[service_name].get("schema")
@@ -201,7 +199,7 @@ def async_setup(hass, config):
             entity_ids.append(entity.entity_id)
             entities.append(entity)
 
-    yield from component.async_add_entities(entities)
+    await component.async_add_entities(entities)
     return True
 
 
