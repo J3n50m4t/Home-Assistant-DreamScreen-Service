@@ -247,7 +247,7 @@ class DreamScreenEntity(Entity):
         }
 
         if isinstance(
-            self.device, (pydreamscreen.DreamScreenHD, pydreamscreen.DreamScreen4K)
+            self.device, (pydreamscreen.DreamScreenHD, pydreamscreen.DreamScreen4K, pydreamscreen.DreamScreenSolo)
         ):
             selected_hdmi = None  # type: str
             if self.device.hdmi_input == 0:
