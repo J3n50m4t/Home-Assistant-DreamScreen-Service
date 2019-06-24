@@ -178,3 +178,8 @@ script:
     "scene": 4
 }
 ```
+## LoveLace
+
+An example how to integrate your dreamscreen into your homeassistant lovelace can be found in the wiki.
+
+[Lovelace Example](https://github.com/GregoryDosh/Home-Assistant-DreamScreen-Service/wiki/LoveLace-Example)
