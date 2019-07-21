@@ -8,21 +8,12 @@ You can clone this repo into your `custom_components` folder in your Home Assist
 ```bash
 git clone https://github.com/GregoryDosh/Home-Assistant-DreamScreen-Service.git dreamscreen
 ```
-For now you also have to clone pydreamscreen see [#21](https://github.com/GregoryDosh/Home-Assistant-DreamScreen-Service/issues/21) for more informations
-```bash
-git clone https://github.com/GregoryDosh/pydreamscreen pydreamscreen
-```
 
 ## Git Submodule
 You can also add it as a submodule which will allow you to pull updates in the future using `git submodule foreach git pull`.
 ```bash
 git submodule add -b master https://github.com/GregoryDosh/Home-Assistant-DreamScreen-Service.git dreamscreen
 ```
-For now you also have to clone pydreamscreen see [#21](https://github.com/GregoryDosh/Home-Assistant-DreamScreen-Service/issues/21) for more informations
-```bash
-git submodule add -b master https://github.com/GregoryDosh/pydreamscreen pydreamscreen
-```
-
 
 ## Configuration
 
