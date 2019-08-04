@@ -18,6 +18,7 @@ git submodule add -b master https://github.com/GregoryDosh/Home-Assistant-DreamS
 ## Configuration
 
 Simply adding the `dreamscreen` component will enable device autodiscovery.
+**THIS DOES NOT WORK See #18. Add your hostname/ip** 
 
 ```yaml
 dreamscreen:
