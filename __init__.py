@@ -83,6 +83,17 @@ SERVICE_AMBIENT_SCENE_SCHEMA = vol.Schema(
     }
 )
 
+SERVICE_HDR_TONE_REMAPPING = "set_hdr_tone_remapping"
+CONF_HDR_TONE_REMAPPING = "hdr_tone_remapping"
+SERVICE_HDR_TONE_REMAPPING_SCHEMA = vol.Schema(
+    {
+        vol.Required(ATTR_ENTITY_ID): cv.entity_ids,
+        vol.Required(CONF_HDR_TONE_REMAPPING): vol.All(
+            vol.Coerce(int), vol.Range(min=0, max=1)
+        ),
+    }
+)
+
 SERVICE_AMBIENT_COLOR = "set_ambient_color"
 CONF_AMBIENT_COLOR = "color"
 SERVICE_AMBIENT_COLOR_SCHEMA = vol.Schema(
@@ -91,6 +102,9 @@ SERVICE_AMBIENT_COLOR_SCHEMA = vol.Schema(
         vol.Required(CONF_AMBIENT_COLOR): vol.Match(r"^#(?:[0-9a-fA-F]{3}){1,2}$"),
     }
 )
+
+SERVICE_RESTART = "restart_device"
+SERVICE_RESTART_SCHEMA = vol.Schema({vol.Required(ATTR_ENTITY_ID): cv.entity_ids})
 
 SERVICE_TO_ATTRIBUTE = {
     SERVICE_MODE: {
@@ -118,6 +132,12 @@ SERVICE_TO_ATTRIBUTE = {
         "schema": SERVICE_AMBIENT_COLOR_SCHEMA,
         "param": CONF_AMBIENT_COLOR,
     },
+    SERVICE_HDR_TONE_REMAPPING: {
+        "attribute": "hdr_tone_remapping",
+        "schema": SERVICE_HDR_TONE_REMAPPING_SCHEMA,
+        "param": CONF_HDR_TONE_REMAPPING,
+    },
+    SERVICE_RESTART: {"attribute": "restart", "schema": SERVICE_RESTART_SCHEMA},
 }
 
 
@@ -134,19 +154,24 @@ async def async_setup(hass, config):
         service_definition = SERVICE_TO_ATTRIBUTE.get(service.service)
 
         attribute = service_definition["attribute"]
-        attribute_value = service.data.get(service_definition["param"])
+        attribute_value = service.data.get(service_definition.get("param", ""))
 
         target_entities = await component.async_extract_from_service(service)
 
         updates = []
         for entity in target_entities:
-            _LOGGER.debug(
-                "setting {} {} to {}".format(
-                    entity.entity_id, attribute, attribute_value
+            if attribute_value:
+                _LOGGER.debug(
+                    "setting {} {} to {}".format(
+                        entity.entity_id, attribute, attribute_value
+                    )
                 )
-            )
-            setattr(entity.device, attribute, attribute_value)
-            updates.append(entity.async_update_ha_state(True))
+                setattr(entity.device, attribute, attribute_value)
+                updates.append(entity.async_update_ha_state(True))
+            else:
+                _LOGGER.debug("calling {} {} ".format(entity.entity_id, attribute))
+                getattr(entity.device, attribute)()
+                updates.append(entity.async_update_ha_state(True))
 
         if updates:
             await asyncio.wait(updates, loop=hass.loop)
@@ -247,7 +272,12 @@ class DreamScreenEntity(Entity):
         }
 
         if isinstance(
-            self.device, (pydreamscreen.DreamScreenHD, pydreamscreen.DreamScreen4K, pydreamscreen.DreamScreenSolo)
+            self.device,
+            (
+                pydreamscreen.DreamScreenHD,
+                pydreamscreen.DreamScreen4K,
+                pydreamscreen.DreamScreenSolo,
+            ),
         ):
             selected_hdmi = None  # type: str
             if self.device.hdmi_input == 0:
@@ -264,6 +294,7 @@ class DreamScreenEntity(Entity):
                     "hdmi_input_2_name": self.device.hdmi_input_2_name,
                     "hdmi_input_3_name": self.device.hdmi_input_3_name,
                     "hdmi_active_channels": self.device.hdmi_active_channels,
+                    "hdr_tone_remapping": self.device.hdr_tone_remapping,
                 }
             )
 
