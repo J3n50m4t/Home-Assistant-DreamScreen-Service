@@ -170,7 +170,7 @@ async def async_setup(hass, config):
                 updates.append(entity.async_update_ha_state(True))
             else:
                 _LOGGER.debug("calling {} {} ".format(entity.entity_id, attribute))
-                getattr(entity.device, attribute)()
+                getattr(entity.device, attribute)
                 updates.append(entity.async_update_ha_state(True))
 
         if updates:
