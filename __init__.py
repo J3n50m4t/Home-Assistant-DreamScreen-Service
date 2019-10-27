@@ -166,12 +166,11 @@ async def async_setup(hass, config):
                         entity.entity_id, attribute, attribute_value
                     )
                 )
-                setattr(entity.device, attribute, attribute_value)
-                updates.append(entity.async_update_ha_state(True))
             else:
                 _LOGGER.debug("calling {} {} ".format(entity.entity_id, attribute))
-                getattr(entity.device, attribute)
-                updates.append(entity.async_update_ha_state(True))
+
+            setattr(entity.device, attribute, attribute_value)
+            updates.append(entity.async_update_ha_state(True))
 
         if updates:
             await asyncio.wait(updates, loop=hass.loop)
