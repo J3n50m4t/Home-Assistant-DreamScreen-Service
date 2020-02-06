@@ -47,3 +47,21 @@ set_ambient_color:
     color:
       description: Hex color to use
       example: "#40e0d0"
+
+set_hdr_tone_remapping:
+  description: Changed DreamScreen hdr tone mapping
+  fields:
+    entity_id:
+      description: Name(s) of entities
+      example: 'dreamscreen.living_room'
+    remapping:
+      description: HDR Mapping 0 or 1
+      example: 0
+      
+restart_device:
+  description: Restarts the DreamScreen
+  fields:
+    entity_id:
+      description: Name(s) of entities
+      example: 'dreamscreen.living_room'
+   
