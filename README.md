@@ -3,6 +3,14 @@ This is a custom component for Home-Assistant which will add the ability to cont
 
 # Installation/Usage
 
+## Hacs custom repo
+
+If you use [Hacs](https://hacs.xyz) go to Settings and paste 
+`https://github.com/GregoryDosh/Home-Assistant-DreamScreen-Service` and choose `integration`.
+You now can switch to the Integrations Tab and install DreamScreen-Service. 
+
+Continue with [configuration](#configuration)
+
 ## Git Clone
 You can clone this repo into your `custom_components` folder in your Home Assistant config location with the name `dreamscreen`.
 ```bash
