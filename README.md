@@ -11,17 +11,11 @@ You now can switch to the Integrations Tab and install DreamScreen-Service.
 
 Continue with [configuration](#configuration)
 
-## Git Clone
-You can clone this repo into your `custom_components` folder in your Home Assistant config location with the name `dreamscreen`.
-```bash
-git clone https://github.com/GregoryDosh/Home-Assistant-DreamScreen-Service.git dreamscreen
-```
+## Manual install
 
-## Git Submodule
-You can also add it as a submodule which will allow you to pull updates in the future using `git submodule foreach git pull`.
-```bash
-git submodule add -b master https://github.com/GregoryDosh/Home-Assistant-DreamScreen-Service.git dreamscreen
-```
+**DEPRECATED - not recommended. - use HACS instead** 
+Copy the contents of `custom_components/dreamscreen/` to the same dir of your homeassistant 
+
 
 ## Configuration
 
