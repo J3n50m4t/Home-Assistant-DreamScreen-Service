@@ -192,4 +192,5 @@ An example how to integrate your dreamscreen into your homeassistant lovelace ca
 Instruction videos on how to set this up can be found here:
 
 [Enable Dreamscreen in Home Assistant - Part 1](https://www.youtube.com/watch?v=52a_CAxx4x4)
+
 [Enable Dreamscreen in Home Assistant - Part 2](https://www.youtube.com/watch?v=D8w42geA-M0)
