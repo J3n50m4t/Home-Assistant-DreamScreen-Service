@@ -7,7 +7,6 @@ import homeassistant.helpers.config_validation as cv
 from homeassistant.const import ATTR_ENTITY_ID, CONF_MODE, CONF_BRIGHTNESS
 from homeassistant.helpers.entity import Entity, generate_entity_id
 from homeassistant.helpers.entity_component import EntityComponent
-from homeassistant.exceptions import PlatformNotReady
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -199,7 +198,6 @@ async def async_setup(hass, config):
             )
             device_state = pydreamscreen.get_state(ip=address, timeout=timeout)
             if device_state == None:
-                raise PlatformNotReady
                 _LOGGER.warn(
                     "Failed to add device [%s] %s. Try setting a 'timeout' in the device config."
                     % (address, deviceName)
