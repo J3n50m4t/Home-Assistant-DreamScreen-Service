@@ -6,7 +6,7 @@ This is a custom component for Home-Assistant which will add the ability to cont
 ## Hacs custom repo
 
 If you use [Hacs](https://hacs.xyz) go to Settings and paste 
-`https://github.com/GregoryDosh/Home-Assistant-DreamScreen-Service` and choose `integration`.
+`https://github.com/J3n50m4t/Home-Assistant-DreamScreen-Service` and choose `integration`.
 You now can switch to the Integrations Tab and install DreamScreen-Service. 
 
 Continue with [configuration](#configuration)
@@ -185,4 +185,4 @@ script:
 
 An example how to integrate your dreamscreen into your homeassistant lovelace can be found in the wiki.
 
-[Lovelace Example](https://github.com/GregoryDosh/Home-Assistant-DreamScreen-Service/wiki/LoveLace-Example)
+[Lovelace Example](https://github.com/J3n50m4t/Home-Assistant-DreamScreen-Service/wiki/LoveLace-Example)
