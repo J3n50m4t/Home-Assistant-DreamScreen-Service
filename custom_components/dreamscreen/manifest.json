@@ -4,5 +4,6 @@
     "documentation": "https://github.com/GregoryDosh/Home-Assistant-DreamScreen-Service",
     "dependencies": [],
     "codeowners": ["https://github.com/GregoryDosh"],
-    "requirements": ["PyDreamScreen>=0.0.14"]
+    "requirements": ["PyDreamScreen>=0.0.14"],
+    "version": "2020.8.5"
   }
