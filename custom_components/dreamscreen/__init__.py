@@ -173,7 +173,8 @@ async def async_setup(hass, config):
             updates.append(entity.async_update_ha_state(True))
 
         if updates:
-            await asyncio.wait(updates, loop=hass.loop)
+            """ Removed loop=hass.loop as asyncio.wait() no long accept loop since python 3.10"""
+            await asyncio.wait(updates)
 
     for service_name in SERVICE_TO_ATTRIBUTE:
         schema = SERVICE_TO_ATTRIBUTE[service_name].get("schema")
