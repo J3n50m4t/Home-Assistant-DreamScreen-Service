@@ -1,3 +1,9 @@
+
+> [!CAUTION]
+> Deprecated. Last Commit was [June 2023](https://github.com/J3n50m4t/Home-Assistant-DreamScreen-Service/commit/40413177c30c6761f9179a74d446a4eed5918899). 
+>All Maintainers Dreamscreen Devices broke. If anyone wants to maintain - ping me.
+
+
 # Home-Assistant-DreamScreen-Service
 This is a custom component for Home-Assistant which will add the ability to control a Wifi enabled DreamScreen (HD & 4k).  Currently the support is new/experimental.
 
